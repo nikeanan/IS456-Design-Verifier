@@ -1,11 +1,12 @@
 class RCBeamVerifier:
-    def __init__(self, b: float, d: float, f_ck: float, f_y: float, A_st: float):
+    def __init__(self, b: float, d: float, f_ck: float, f_y: float, A_st: float, d_prime: float = 50.0):
         # Standardizing units to mm and N/mm² (MPa) for IS 456 compliance
         self.b = b
         self.d = d
         self.f_ck = f_ck
         self.f_y = f_y
         self.A_st = A_st
+        self.d_prime = d_prime
 
     def limiting_neutral_axis(self) -> float:
         if self.f_y == 250:
@@ -38,21 +39,40 @@ class RCBeamVerifier:
         M_ur = self.ultimate_moment_capacity()
         state = self.is_under_or_over_reinforced()
         
+        if state == "Over-reinforced":
+            return f"FAIL (Over-reinforced): IS 456 prohibits over-reinforced sections. Redesign required."
+            
         if M_ur >= M_u_applied:
             return f"SAFE ({state}): Capacity {M_ur:.2f} kNm >= Applied {M_u_applied:.2f} kNm."
+            
         return f"FAIL ({state}): Capacity {M_ur:.2f} kNm < Applied {M_u_applied:.2f} kNm."
-    
-    
-# --- BENCHMARK TEST ---
-if __name__ == "__main__":
-    # Test Case: b=230mm, d=450mm, M25 Concrete, Fe415 Steel, Ast=1000mm^2
-    beam = RCBeamVerifier(b=230, d=450, f_ck=25, f_y=415, A_st=1000)
-    
-    print("--- IS 456 RC Beam Verification ---")
-    print(f"Limiting Neutral Axis (x_max): {beam.limiting_neutral_axis():.2f} mm")
-    print(f"Section Status: {beam.is_under_or_over_reinforced()}")
-    print(f"Ultimate Capacity (M_ur): {beam.ultimate_moment_capacity():.2f} kNm")
-    
-    # Test against an applied factored load of 120 kNm
-    print("\n--- Design Check ---")
-    print(beam.verify_design(M_u_applied=120))
+
+    def design_doubly_reinforced(self, M_u_applied: float) -> dict:
+        x_max = self.limiting_neutral_axis()
+        
+        # Calculate limiting moment capacity (M_u,lim) for balanced section
+        M_u_lim = (0.36 * (x_max / self.d) * (1 - 0.42 * (x_max / self.d)) * self.b * (self.d ** 2) * self.f_ck) / 1e6
+        
+        if M_u_applied <= M_u_lim:
+            return {"status": "Singly Reinforced Sufficient", "A_sc": 0, "A_st_total": self.A_st}
+            
+        # M_u2 is the excess moment to be resisted by compression steel
+        M_u2 = M_u_applied - M_u_lim
+        
+        # Approximation of f_sc (stress in compression steel) for prototype
+        f_sc = 0.87 * self.f_y
+        
+        # Required Compression Steel (A_sc)
+        A_sc = (M_u2 * 1e6) / (f_sc * (self.d - self.d_prime))
+        
+        # Additional Tension Steel (A_st2)
+        A_st2 = (A_sc * f_sc) / (0.87 * self.f_y)
+        
+        # Limiting Tension Steel (A_st,lim) for the balanced concrete section
+        A_st_lim = (0.36 * self.f_ck * self.b * x_max) / (0.87 * self.f_y)
+        
+        return {
+            "status": "Requires Doubly Reinforced Design", 
+            "A_sc": A_sc, 
+            "A_st_total": A_st_lim + A_st2
+        }
