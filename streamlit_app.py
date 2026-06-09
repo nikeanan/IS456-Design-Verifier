@@ -124,11 +124,11 @@ tab1, tab2 = st.tabs(["🏗️ Single Beam Analyzer", "📂 Batch CSV Processor"
 # ==========================================
 # TAB 1: SINGLE BEAM ANALYZER
 # ==========================================
+# No spaces here
 with tab1:
+    # Exactly 4 spaces here
     with st.sidebar:
-        st.header("Design Parameters")
-       with st.sidebar:
-        # --- BIM Integration (DXF Parser) ---
+        # Exactly 8 spaces here
         st.header("BIM Integration")
         dxf_file = st.file_uploader("Upload Beam DXF", type=['dxf'])
         
@@ -169,7 +169,7 @@ with tab1:
         # The values here now dynamically update if a DXF is uploaded!
         b = st.number_input("Width (b) [mm]", value=dxf_b, min_value=10.0, max_value=2000.0)
         d = st.number_input("Effective Depth (d) [mm]", value=dxf_d, min_value=10.0, max_value=2500.0)
-        
+
         # --- ML Predictor Integration ---
         st.markdown("**Materials Science Integration**")
         use_ml = st.toggle("🤖 Predict f_ck via ML Model")
