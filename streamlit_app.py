@@ -121,15 +121,28 @@ st.title("Automated IS 456 Design Verifier")
 # Create Tabs
 tab1, tab2 = st.tabs(["🏗️ Single Beam Analyzer", "📂 Batch CSV Processor"])
 
+
 # ==========================================
 # TAB 1: SINGLE BEAM ANALYZER
 # ==========================================
-# No spaces here
 with tab1:
-    # Exactly 4 spaces here
     with st.sidebar:
-        # Exactly 8 spaces here
+        # --- BIM Integration (DXF Parser) ---
         st.header("BIM Integration")
+        
+        # UX Instructions & Template Download
+        st.info("💡 **Required Format:** CAD file must contain a block named `BEAM_DIMENSIONS` with attributes `b` and `d`.")
+        try:
+            with open("sample_beam.dxf", "rb") as file:
+                st.download_button(
+                    label="📥 Download Sample DXF Template",
+                    data=file,
+                    file_name="sample_beam.dxf",
+                    mime="application/dxf"
+                )
+        except FileNotFoundError:
+            pass
+            
         dxf_file = st.file_uploader("Upload Beam DXF", type=['dxf'])
         
         # Default values before upload
@@ -143,7 +156,6 @@ with tab1:
                 msp = doc.modelspace()
                 found = False
                 
-                # Search for the specific AutoCAD block
                 for insert in msp.query('INSERT'):
                     if insert.dxf.name == 'BEAM_DIMENSIONS':
                         for attrib in insert.attribs:
@@ -165,8 +177,6 @@ with tab1:
 
         # --- Design Parameters ---
         st.header("Design Parameters")
-        
-        # The values here now dynamically update if a DXF is uploaded!
         b = st.number_input("Width (b) [mm]", value=dxf_b, min_value=10.0, max_value=2000.0)
         d = st.number_input("Effective Depth (d) [mm]", value=dxf_d, min_value=10.0, max_value=2500.0)
 
@@ -181,8 +191,6 @@ with tab1:
             fine_agg = st.number_input("Fine Aggregate", value=700.0, step=10.0)
             coarse_agg = st.number_input("Coarse Aggregate", value=1000.0, step=10.0)
             
-            # Prototype ML Placeholder (Abram's Law approximation)
-            # You will replace this with: model.predict([[cement, water, fine_agg, coarse_agg]])
             wc_ratio = water / cement
             predicted_fck = max(15.0, min(60.0, 110.0 / (4 ** wc_ratio))) 
             
@@ -190,24 +198,22 @@ with tab1:
             f_ck = predicted_fck
         else:
             f_ck = st.number_input("Concrete Grade (f_ck) [MPa]", value=25.0, min_value=15.0, max_value=60.0)
-        # --------------------------------
+            
         f_y = st.selectbox("Steel Grade (f_y) [MPa]", options=[250, 415, 500], index=1)
         A_st = st.number_input("Tension Steel Area (A_st) [mm²]", value=1000.0, min_value=50.0, max_value=10000.0)
         st.divider()
         M_u_applied = st.number_input("Applied Factored Moment [kNm]", value=120.0, min_value=1.0, max_value=1000.0)
 
+    # --- Structural Calculations ---
     verifier = RCBeamVerifier(b, d, f_ck, f_y, A_st)
     x_max = verifier.limiting_neutral_axis()
     x_u = (0.87 * f_y * A_st) / (0.36 * f_ck * b)
     M_ur = verifier.ultimate_moment_capacity()
     verification_status = verifier.verify_design(M_u_applied)
 
+    # --- Dashboard Layout ---
     st.subheader("Structural Analysis", anchor=False)
     text_col, plot_col = st.columns([1.5, 1])
-    # Assuming your variables are currently named b, d, actual_xu, and limiting_xu
-    st.write("### Cross-Section Visualization")
-    fig = render_beam_visualizer(b, d, x_u, x_max)
-    st.pyplot(fig)
 
     with text_col:
         st.metric("Limiting NA ($x_{max}$)", f"{x_max:.2f} mm")
@@ -215,7 +221,9 @@ with tab1:
         st.metric("Capacity ($M_{ur}$)", f"{M_ur:.2f} kNm")
 
     with plot_col:
-        fig = plot_beam_cross_section(b, d, x_u, x_max)
+        # We only call the new, dynamic visualizer here
+        st.write("**Cross-Section**")
+        fig = render_beam_visualizer(b, d, x_u, x_max)
         st.pyplot(fig)
 
     st.subheader("Compliance & Design Actions", anchor=False)
