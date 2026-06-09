@@ -1,0 +1,7 @@
+streamlit
+pandas
+matplotlib
+ezdxf
+fpdf2
+scikit-learn
+xgboost
