@@ -7,6 +7,23 @@ import matplotlib.patches as patches
 from app import RCBeamVerifier
 from fpdf import FPDF
 
+# --- Professional UI Polish ---
+st.markdown("""
+    <style>
+    /* Make headers pop */
+    .stApp { background-color: #0e1117; }
+    h1 { color: #ff4b4b !important; text-align: center; }
+    
+    /* Style the dashboard boxes */
+    div.stMetric {
+        background-color: #262730;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #4a4a4a;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 def render_beam_visualizer(b, d, xu, xu_max):
     """Generates a dynamic IS 456 beam cross-section plot."""
     fig, ax = plt.subplots(figsize=(6, 8))
@@ -151,30 +168,30 @@ with tab1:
         
         if dxf_file is not None:
             try:
-                # Parse the DXF file in memory
-                doc = ezdxf.read(io.BytesIO(dxf_file.read()))
+                # Save the uploaded file to a temporary location on the server
+                with open("temp_beam.dxf", "wb") as f:
+                    f.write(dxf_file.getbuffer())
+                
+                # Let ezdxf handle the file directly from the disk
+                doc = ezdxf.readfile("temp_beam.dxf")
                 msp = doc.modelspace()
                 found = False
                 
                 for insert in msp.query('INSERT'):
                     if insert.dxf.name == 'BEAM_DIMENSIONS':
                         for attrib in insert.attribs:
-                            if attrib.dxf.tag == 'b':
-                                dxf_b = float(attrib.dxf.text)
-                            elif attrib.dxf.tag == 'd':
-                                dxf_d = float(attrib.dxf.text)
+                            if attrib.dxf.tag == 'b': dxf_b = float(attrib.dxf.text)
+                            elif attrib.dxf.tag == 'd': dxf_d = float(attrib.dxf.text)
                         found = True
                         break
                 
                 if found:
                     st.success(f"CAD Data Synced: b={dxf_b}mm, d={dxf_d}mm")
                 else:
-                    st.warning("BEAM_DIMENSIONS block not found in drawing.")
+                    st.warning("BEAM_DIMENSIONS block not found. Using defaults.")
             except Exception as e:
-                st.error("Error parsing DXF file. Ensure it is a valid format.")
+                st.error(f"DXF Parsing Failed: {e}")
                 
-        st.divider()
-
         # --- Design Parameters ---
         st.header("Design Parameters")
         b = st.number_input("Width (b) [mm]", value=dxf_b, min_value=10.0, max_value=2000.0)
@@ -211,20 +228,21 @@ with tab1:
     M_ur = verifier.ultimate_moment_capacity()
     verification_status = verifier.verify_design(M_u_applied)
 
-    # --- Dashboard Layout ---
+   # --- Dashboard Layout ---
     st.subheader("Structural Analysis", anchor=False)
-    text_col, plot_col = st.columns([1.5, 1])
+    
+    # Use one clean container for all metrics
+    with st.container(border=True):
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Limiting NA ($x_{max}$)", f"{x_max:.2f} mm")
+        col2.metric("Actual NA ($x_u$)", f"{x_u:.2f} mm")
+        col3.metric("Capacity ($M_{ur}$)", f"{M_ur:.2f} kNm")
 
-    with text_col:
-        st.metric("Limiting NA ($x_{max}$)", f"{x_max:.2f} mm")
-        st.metric("Actual NA ($x_u$)", f"{x_u:.2f} mm")
-        st.metric("Capacity ($M_{ur}$)", f"{M_ur:.2f} kNm")
+    # Only one visualizer block
+    st.write("### Cross-Section Visualization")
+    fig = render_beam_visualizer(b, d, x_u, x_max)
+    st.pyplot(fig)
 
-    with plot_col:
-        # We only call the new, dynamic visualizer here
-        st.write("**Cross-Section**")
-        fig = render_beam_visualizer(b, d, x_u, x_max)
-        st.pyplot(fig)
 
     st.subheader("Compliance & Design Actions", anchor=False)
     if "SAFE" in verification_status:
