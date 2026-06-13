@@ -489,7 +489,7 @@ $SKPOLY
   9
 $TDCREATE
  40
-2461201.603634259
+2461203.511064815
   9
 $TDUCREATE
  40
@@ -497,7 +497,7 @@ $TDUCREATE
   9
 $TDUPDATE
  40
-2461201.603634259
+2461203.511064815
   9
 $TDUUPDATE
  40
@@ -549,7 +549,7 @@ $SPLINESEGS
   9
 $HANDSEED
   5
-3B
+36
   9
 $SURFTAB1
  70
@@ -929,11 +929,11 @@ $PSTYLEMODE
   9
 $FINGERPRINTGUID
   2
-{2553206C-4A04-4138-8C23-CD6C18051BCD}
+{CB86B5B4-2931-49DF-A827-DBBCBB2696B3}
   9
 $VERSIONGUID
   2
-{A320F056-62EF-411E-8682-DD101640D25C}
+{84B37BF9-714A-46E3-B6DF-F1C6524E6F60}
   9
 $EXTNAMES
 290
@@ -1323,9 +1323,9 @@ ISM
   0
 CLASS
   1
-LAYOUT
+ACDBPLACEHOLDER
   2
-AcDbLayout
+AcDbPlaceHolder
   3
 ObjectDBX Classes
  90
@@ -1339,9 +1339,9 @@ ObjectDBX Classes
   0
 CLASS
   1
-ACDBPLACEHOLDER
+LAYOUT
   2
-AcDbPlaceHolder
+AcDbLayout
   3
 ObjectDBX Classes
  90
@@ -1549,7 +1549,7 @@ LAYER
 100
 AcDbSymbolTable
  70
-2
+4
   0
 LAYER
   5
@@ -1594,6 +1594,54 @@ Defpoints
 Continuous
 290
 0
+370
+-3
+390
+13
+347
+21
+  0
+LAYER
+  5
+2F
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+S-COL
+ 70
+0
+ 62
+7
+  6
+Continuous
+370
+-3
+390
+13
+347
+21
+  0
+LAYER
+  5
+30
+330
+1
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+S-BEAM
+ 70
+0
+ 62
+7
+  6
+Continuous
 370
 -3
 390
@@ -1701,7 +1749,7 @@ ACAD
   0
 APPID
   5
-38
+33
 330
 3
 100
@@ -1715,7 +1763,7 @@ HATCHBACKGROUNDCOLOR
   0
 APPID
   5
-39
+34
 330
 3
 100
@@ -1891,7 +1939,7 @@ BLOCK_RECORD
 100
 AcDbSymbolTable
  70
-3
+2
   0
 BLOCK_RECORD
   5
@@ -1926,26 +1974,6 @@ AcDbBlockTableRecord
 *Paper_Space
 340
 1E
- 70
-0
-280
-1
-281
-0
-  0
-BLOCK_RECORD
-  5
-2F
-330
-9
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-BEAM_DIMENSIONS
-340
-0
  70
 0
 280
@@ -2037,143 +2065,23 @@ AcDbEntity
 100
 AcDbBlockEnd
   0
-BLOCK
-  5
-30
-330
-2F
-100
-AcDbEntity
-  8
-0
-100
-AcDbBlockBegin
-  2
-BEAM_DIMENSIONS
- 70
-2
- 10
-0.0
- 20
-0.0
- 30
-0.0
-  3
-BEAM_DIMENSIONS
-  1
-
-  0
-ATTDEF
-  5
-32
-330
-2F
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 40
-2.5
-  1
-
-100
-AcDbAttributeDefinition
-  3
-Width
-  2
-b
- 70
-0
-  0
-ATTDEF
-  5
-33
-330
-2F
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-0.0
- 20
--10.0
- 30
-0.0
- 40
-2.5
-  1
-
-100
-AcDbAttributeDefinition
-  3
-Depth
-  2
-d
- 70
-0
-  0
-ENDBLK
-  5
-31
-330
-2F
-100
-AcDbEntity
-  8
-0
-100
-AcDbBlockEnd
-  0
 ENDSEC
   0
 SECTION
   2
 ENTITIES
   0
-INSERT
+CIRCLE
   5
-34
+31
 330
 17
 100
 AcDbEntity
   8
-0
+S-COL
 100
-AcDbBlockReference
- 66
-1
-  2
-BEAM_DIMENSIONS
- 10
-0.0
- 20
-0.0
- 30
-0.0
-  0
-ATTRIB
-  5
-36
-330
-17
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
+AcDbCircle
  10
 0.0
  20
@@ -2181,65 +2089,31 @@ AcDbText
  30
 0.0
  40
-2.5
-  1
-250
- 11
-0.0
- 21
-0.0
- 31
-0.0
-100
-AcDbAttribute
-  2
-b
- 70
-0
+75.0
   0
-ATTRIB
+LINE
   5
-37
+32
 330
 17
 100
 AcDbEntity
   8
-0
+S-BEAM
 100
-AcDbText
+AcDbLine
  10
 0.0
  20
--10.0
+0.0
  30
 0.0
- 40
-2.5
-  1
-500
  11
-0.0
+400.0
  21
--10.0
+0.0
  31
 0.0
-100
-AcDbAttribute
-  2
-d
- 70
-0
-  0
-SEQEND
-  5
-35
-330
-34
-100
-AcDbEntity
-  8
-0
   0
 ENDSEC
   0
@@ -3231,7 +3105,7 @@ CREATED_BY_EZDXF
   3
 WRITTEN_BY_EZDXF
 350
-3A
+35
   0
 DICTIONARYVAR
   5
@@ -3243,11 +3117,11 @@ DictionaryVariables
 280
 0
   1
-1.4.4 @ 2026-06-09T14:29:14.986969+00:00
+1.4.4 @ 2026-06-11T12:15:56.759446+00:00
   0
 DICTIONARYVAR
   5
-3A
+35
 330
 2D
 100
@@ -3255,7 +3129,7 @@ DictionaryVariables
 280
 0
   1
-1.4.4 @ 2026-06-09T14:29:14.998884+00:00
+1.4.4 @ 2026-06-11T12:15:56.762065+00:00
   0
 ENDSEC
   0
