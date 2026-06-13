@@ -5,7 +5,39 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from app import RCBeamVerifier
+import streamlit as st
+from report_generator import create_pdf
 from fpdf import FPDF
+def main():
+    st.title("Structural Design Verification")
+
+    # Example parameters
+    b = 250  # Beam width in mm
+    d = 400  # Effective depth of the beam in mm
+    f_ck = 30  # Characteristic compressive strength of concrete in N/mm²
+    f_y = 500  # Characteristic yield strength of steel in N/mm²
+    A_st = 10  # Area of tension reinforcement in mm²
+    x_max = 200  # Maximum depth of tension reinforcement in mm
+    x_u = 150  # Ultimate tensile stress in steel in N/mm²
+    M_ur = 5000  # Ultimate moment in the beam in Nmm
+    verification_status = "Pass"
+
+    if st.button("Generate PDF Report"):
+        pdf_bytes = create_pdf(b, d, f_ck, f_y, A_st, x_max, x_u, M_ur, verification_status)
+
+        # Save the PDF to a file and allow download
+        with open("structural_report.pdf", "wb") as pdf_file:
+            pdf_file.write(pdf_bytes)
+
+        st.download_button(
+            label="Download PDF",
+            data=pdf_bytes,
+            file_name="structural_report.pdf",
+            mime="application/pdf"
+        )
+
+if __name__ == "__main__":
+    main()
 
 # --- Professional UI Polish ---
 st.markdown("""
@@ -148,7 +180,7 @@ with tab1:
         st.header("BIM Integration")
         
         # UX Instructions & Template Download
-        st.info("💡 **Required Format:** CAD file must contain a block named `BEAM_DIMENSIONS` with attributes `b` and `d`.")
+        st.info("💡 **Required Format:** Save as **'AutoCAD R12/LT2 DXF (*.dxf)'** format. Ensure the beam dimensions are inside a **Block** named `BEAM_DIMENSIONS` with attributes `b` and `d`.")
         try:
             with open("sample_beam.dxf", "rb") as file:
                 st.download_button(
@@ -191,7 +223,7 @@ with tab1:
                     st.warning("BEAM_DIMENSIONS block not found. Using defaults.")
             except Exception as e:
                 st.error(f"DXF Parsing Failed: {e}")
-                
+
         # --- Design Parameters ---
         st.header("Design Parameters")
         b = st.number_input("Width (b) [mm]", value=dxf_b, min_value=10.0, max_value=2000.0)

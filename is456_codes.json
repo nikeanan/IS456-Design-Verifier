@@ -1,0 +1,15 @@
+{
+    "concrete": {
+        "name": "M25",
+        "strength": 30
+    },
+    "steel": {
+        "name": "Fe500",
+        "yield_strength": 500
+    },
+    "geometric_limits": {
+        "min_column_height": 200,
+        "min_beam_width": 200
+    },
+    "unit_scaler": 1000
+}
