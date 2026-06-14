@@ -1,15 +1,40 @@
 {
-    "concrete": {
-        "name": "M25",
-        "strength": 30
+  "IS456_2000": {
+    "material_factors": {
+      "gamma_m_steel": 1.15,
+      "gamma_m_concrete": 1.5,
+      "design_yield_stress_factor": 0.87,
+      "design_concrete_stress_factor": 0.36,
+      "column_pure_axial_concrete_factor": 0.45,
+      "column_pure_axial_steel_factor": 0.75
     },
-    "steel": {
-        "name": "Fe500",
-        "yield_strength": 500
+    "flexure": {
+      "xu_max_ratio": {
+        "250": 0.53,
+        "415": 0.48,
+        "500": 0.46
+      }
     },
-    "geometric_limits": {
-        "min_column_height": 200,
-        "min_beam_width": 200
+    "shear": {
+      "tau_c_max": {
+        "15": 2.5,
+        "20": 2.8,
+        "25": 3.1,
+        "30": 3.5,
+        "35": 3.7,
+        "40": 4.0
+      },
+      "torsion_equivalent_shear_factor": 1.6
     },
-    "unit_scaler": 1000
+    "deflection": {
+      "basic_span_ratios": {
+        "cantilever": 7,
+        "simply_supported": 20,
+        "continuous": 26,
+        "two_way_simply_supported": 35,
+        "two_way_continuous": 40
+      },
+      "high_yield_steel_modifier": 0.8
+    }
+  }
 }

@@ -1,0 +1,12 @@
+{
+  "material_factors": {
+    "design_yield_stress_factor": 0.87,
+    "design_concrete_stress_factor": 0.36
+  },
+  "flexure": {
+    "xu_max_ratio": {
+      "415": 0.48,
+      "500": 0.46
+    }
+  }
+}
