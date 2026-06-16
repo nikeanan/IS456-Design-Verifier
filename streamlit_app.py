@@ -1,4 +1,5 @@
 import streamlit as st
+import importlib
 import pandas as pd
 import tempfile
 import os
@@ -163,10 +164,34 @@ if element_choice == "RC Beams":
         cost_per_m = boq['total_cost'] / (L / 1000)
         st.write(f"- Total Cost per Meter Span: **₹ {cost_per_m:,.2f} per m**")
         
-        # 7. PDF Report
-        pdf_bytes = create_pdf_report(verifier, boq, fig)
-        st.download_button(label="📄 Download Official PDF Report", data=pdf_bytes, file_name="IS456_Report_Beam.pdf", mime="application/pdf", type="primary")
-
+        # 7. PDF Report & CAD Export
+        from engine.dxf_exporter import CADExporter
+        
+        st.write("---")
+        btn_col1, btn_col2 = st.columns(2)
+        
+        with btn_col1:
+            # Generate and download PDF
+            pdf_bytes = create_pdf_report(verifier, boq, fig)
+            st.download_button(
+                label="📄 Download Official PDF Report", 
+                data=pdf_bytes, 
+                file_name="IS456_Report_Beam.pdf", 
+                mime="application/pdf", 
+                type="primary"
+            )
+            
+        with btn_col2:
+            # Generate and download AutoCAD .dxf
+            dxf_file = CADExporter.generate_cross_section_dxf(verifier.element_id, b, D, "Beam")
+            with open(dxf_file, "rb") as f:
+                st.download_button(
+                    label="📐 Download CAD (.dxf)", 
+                    data=f, 
+                    file_name=f"Beam_{verifier.element_id}.dxf", 
+                    mime="application/dxf",
+                    type="secondary"
+                )
 elif element_choice == "RC Columns":
     col1, col2 = st.columns([1, 1])
     
