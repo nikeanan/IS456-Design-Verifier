@@ -1,0 +1,5 @@
+			Tasks to follow for every projects
+
+also create a file where we will note down where we stuck or have to retrial ,etc. and why and how we fix it.. it will be helpful for later understanding and facing any interviews?
+
+make a file where we record every results or images and progress of our report...

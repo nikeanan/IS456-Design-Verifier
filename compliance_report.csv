@@ -1,2 +1,3 @@
 Type,ID,Dimension,Status,Capacity_kN
-BEAM,1,250.00mm,Pass,N/A
+BEAM,1,400.00mm,Pass,N/A
+COLUMN,1,450.00mm,Pass,2072.25

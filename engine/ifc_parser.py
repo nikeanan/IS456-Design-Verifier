@@ -114,30 +114,50 @@ class BIMExtractor:
         beams = self.model.by_type('IfcBeam')
         data = []
         for i, beam in enumerate(beams):
+            name = beam.Name if beam.Name else f"BIM_Beam_{i+1}"
             geom = self.extract_element_geometry(beam)
             f_ck = self.extract_material_grade(beam)
-            if geom['b'] > 0 and geom['D'] > 0:
-                data.append({
-                    "Beam_ID": beam.Name if beam.Name else f"BIM_Beam_{i+1}",
-                    "b": geom['b'], "D": geom['D'], "d": geom['D'] - 50,
-                    "L": 5000.0, "f_ck": f_ck, "f_y": 415.0, "A_st": 0.0,
-                    "M_u": 0.0, "V_u": 0.0, "T_u": 0.0
-                })
+            
+            b = geom['b'] or 0.0
+            D = geom['D'] or 0.0
+            
+            # Regex fallback for names like "300x450"
+            if b == 0 and D == 0:
+                match = re.search(r'(\d+(?:\.\d+)?)\s*[xX]\s*(\d+(?:\.\d+)?)', name)
+                if match:
+                    b, D = float(match.group(1)), float(match.group(2))
+
+            # No longer dropping 0.0 elements; let the UI validation handle it!
+            data.append({
+                "Beam_ID": name,
+                "b": float(b), "D": float(D), "d": float(D) - 50 if D > 50 else 0.0,
+                "L": 5000.0, "f_ck": f_ck, "f_y": 415.0, "A_st": 0.0,
+                "M_u": 0.0, "V_u": 0.0, "T_u": 0.0
+            })
         return pd.DataFrame(data)
 
     def get_columns_dataframe(self):
         columns = self.model.by_type('IfcColumn')
         data = []
         for i, col in enumerate(columns):
+            name = col.Name if col.Name else f"BIM_Col_{i+1}"
             geom = self.extract_element_geometry(col)
             f_ck = self.extract_material_grade(col)
-            if geom['b'] > 0 and geom['D'] > 0:
-                data.append({
-                    "Column_ID": col.Name if col.Name else f"BIM_Col_{i+1}",
-                    "b": geom['b'], "D": geom['D'], "L_eff": 3000.0,
-                    "f_ck": f_ck, "f_y": 415.0, "A_sc": 0.0,
-                    "P_u": 0.0, "M_u_applied": 0.0
-                })
+            
+            b = geom['b'] or 0.0
+            D = geom['D'] or 0.0
+
+            if b == 0 and D == 0:
+                match = re.search(r'(\d+(?:\.\d+)?)\s*[xX]\s*(\d+(?:\.\d+)?)', name)
+                if match:
+                    b, D = float(match.group(1)), float(match.group(2))
+
+            data.append({
+                "Column_ID": name,
+                "b": float(b), "D": float(D), "L_eff": 3000.0,
+                "f_ck": f_ck, "f_y": 415.0, "A_sc": 0.0,
+                "P_u": 0.0, "M_u_applied": 0.0
+            })
         return pd.DataFrame(data)
 
     def get_slabs_dataframe(self):

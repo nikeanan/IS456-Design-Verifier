@@ -1,2 +1,71 @@
-.venv/
+# ── Python ─────────────────────────────
 __pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+
+# ── Virtual Environments ────────────────
+venv/
+.venv/
+env/
+ENV/
+
+# ── Conda ───────────────────────────────
+# Do not commit conda env folders if inside the project
+.conda/
+
+# ── Byte-compiled / Caches ──────────────
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── ML Models (large binaries) ──────────
+# Uncomment if you want to exclude the model pickle:
+# ml/concrete_predictor.pkl
+
+# ── Generated outputs ───────────────────
+*.dxf
+*.pdf
+output_reports/
+batch_output/
+
+# ── IDE / Editor ────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ── Testing / Coverage ──────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+test-results.xml
+
+# ── Streamlit ───────────────────────────
+.streamlit/secrets.toml
+
+# ── IFC / BIM ───────────────────────────
+*.ifc
+
+# ── Jupyter ─────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# Custom ODA and Binaries
+*.dll
+*.tx
+*.exe
+*.rvt
+*.dwg
+*.zip
+*.ico
+imageformats/
+platforms/
+RevitBridge/
+CAD dwg/
+*.log
