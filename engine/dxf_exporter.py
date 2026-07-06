@@ -1,4 +1,5 @@
 import ezdxf
+from ezdxf.enums import TextEntityAlignment
 
 class CADExporter:
     @staticmethod
@@ -47,17 +48,23 @@ class CADExporter:
         msp.add_line((0, dim_offset_b/2), (0, dim_offset_b*1.5), dxfattribs={'layer': 'DIMENSIONS'})
         msp.add_line((b, dim_offset_b/2), (b, dim_offset_b*1.5), dxfattribs={'layer': 'DIMENSIONS'})
         msp.add_line((0, dim_offset_b), (b, dim_offset_b), dxfattribs={'layer': 'DIMENSIONS'})
-        msp.add_text(f"b = {b} mm", dxfattribs={'height': 20, 'layer': 'TEXT'}).set_placement((b/2, dim_offset_b - 25), align='CENTER')
+        msp.add_text(f"b = {b} mm", dxfattribs={'height': 20, 'layer': 'TEXT'}).set_placement(
+            (b/2, dim_offset_b - 25), align=TextEntityAlignment.CENTER
+        )
 
         # Depth Dimension
         dim_offset_D = -40
         msp.add_line((dim_offset_D/2, 0), (dim_offset_D*1.5, 0), dxfattribs={'layer': 'DIMENSIONS'})
         msp.add_line((dim_offset_D/2, D), (dim_offset_D*1.5, D), dxfattribs={'layer': 'DIMENSIONS'})
         msp.add_line((dim_offset_D, 0), (dim_offset_D, D), dxfattribs={'layer': 'DIMENSIONS'})
-        msp.add_text(f"D = {D} mm", dxfattribs={'height': 20, 'layer': 'TEXT'}).set_placement((dim_offset_D - 25, D/2), align='MIDDLE_CENTER', rotation=90)
+        msp.add_text(f"D = {D} mm", dxfattribs={'height': 20, 'layer': 'TEXT', 'rotation': 90}).set_placement(
+            (dim_offset_D - 25, D/2), align=TextEntityAlignment.MIDDLE_CENTER
+        )
 
         # Title
-        msp.add_text(f"{element_type} Section: {element_id}", dxfattribs={'height': 30, 'layer': 'TEXT'}).set_placement((b/2, D + 40), align='BOTTOM_CENTER')
+        msp.add_text(f"{element_type} Section: {element_id}", dxfattribs={'height': 30, 'layer': 'TEXT'}).set_placement(
+            (b/2, D + 40), align=TextEntityAlignment.BOTTOM_CENTER
+        )
 
         # Save File
         safe_id = str(element_id).replace(':', '_').replace(' ', '_')

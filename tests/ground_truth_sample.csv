@@ -1,0 +1,4 @@
+drawing_id,element_id,clause,expected_status,notes
+sample_plan.dxf,B1,Min Tension Steel (Cl.26.5.1.1),PASS,Manually verified
+sample_plan.dxf,C1,Flexure Capacity,FAIL,Needs larger section
+sample_plan.dxf,B2,Shear & Torsion (tau_v),ACTION REQUIRED,Stirrups required

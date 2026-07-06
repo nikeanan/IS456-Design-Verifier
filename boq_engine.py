@@ -16,7 +16,11 @@ def calculate_boq(element_type, width, depth, length, steel_area, steel_grade, c
     vol_concrete_m3 = (width * depth * length) / 1e9
     
     # Steel weight conversion (Area * Length * Density)
-    vol_steel_m3 = (steel_area * length) / 1e9
+    if element_type == "Slab":
+        # Reinforcement runs along the short span (width)
+        vol_steel_m3 = (steel_area * width) / 1e9
+    else:
+        vol_steel_m3 = (steel_area * length) / 1e9
     weight_steel_kg = vol_steel_m3 * unit_weight_steel
     
     # Cost Calculations
@@ -25,8 +29,8 @@ def calculate_boq(element_type, width, depth, length, steel_area, steel_grade, c
     total_cost = cost_concrete + cost_steel
     
     return {
-        "volume_m3": round(vol_concrete_m3, 2),
-        "steel_kg": round(weight_steel_kg, 2),
+        "volume_m3": round(vol_concrete_m3, 6),
+        "steel_kg": round(weight_steel_kg, 6),
         "total_cost": round(total_cost, 2),
         "concrete_cost_per_m3": round(rate_concrete_per_m3, 2), # <-- Added
         "steel_cost_per_kg": round(rate_steel_per_kg, 2)        # <-- Added

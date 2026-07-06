@@ -4,7 +4,7 @@ import os
 
 # --- Configuration ---
 DXF_FILE_PATH = 'sample_plan.dxf'
-JSON_FILE_PATH = 'is456_codes.json'
+JSON_FILE_PATH = 'sample_is456_codes.json'
 
 # --- Block 1: Generate IS 456 Data ---
 def generate_is456_json():
