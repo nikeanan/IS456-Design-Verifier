@@ -37,7 +37,6 @@ class RCColumnVerifier(StructuralElement):
         # Load dynamic material factors from configuration
         fac_c_axial = self.constants['material_factors'].get('column_pure_axial_concrete_factor', 0.45)
         fac_y_axial = self.constants['material_factors'].get('column_pure_axial_steel_factor', 0.75)
-        fac_c_flex = self.constants['material_factors'].get('design_concrete_stress_factor', 0.36)
         fac_y_flex = self.constants['material_factors'].get('design_yield_stress_factor', 0.87)
 
         # 1. Calculate Minimum Eccentricity

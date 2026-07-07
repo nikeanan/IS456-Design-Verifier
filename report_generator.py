@@ -118,8 +118,10 @@ def create_pdf_report(verifier, boq_data, fig):
         # Save matplotlib figure to a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmpfile:
             # Change colors to black/white for printing purposes before saving
-            for text in fig.findobj(match=plt.Text): text.set_color('black')
-            for line in fig.findobj(match=plt.Line2D): line.set_color('black')
+            for text in fig.findobj(match=plt.Text):
+                text.set_color('black')
+            for line in fig.findobj(match=plt.Line2D):
+                line.set_color('black')
             fig.patch.set_facecolor('white')
             fig.savefig(tmpfile.name, format="png", bbox_inches='tight', dpi=300)
             

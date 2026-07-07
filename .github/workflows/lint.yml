@@ -1,0 +1,33 @@
+name: Lint — Ruff Code Quality
+
+on:
+  push:
+    branches: ["main", "master", "develop"]
+  pull_request:
+    branches: ["main", "master"]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Ruff Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Run ruff (check only — no autofix)
+        run: |
+          ruff check . \
+            --ignore E501,W291,W293,E302,E303,E741 \
+            --exclude venv,__pycache__,.git,ml/concrete_predictor.pkl
