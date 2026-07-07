@@ -505,7 +505,7 @@ elif element_choice == "Batch CSV Processor":
                 
                 csv_export = results_df.to_csv(index=False).encode('utf-8')
                 st.download_button(
-                    label=f"📥 Download Verified Dataset (CSV)",
+                    label="📥 Download Verified Dataset (CSV)",
                     data=csv_export,
                     file_name=f'Verified_{batch_type.replace(" ", "_")}_Results.csv',
                     mime='text/csv',

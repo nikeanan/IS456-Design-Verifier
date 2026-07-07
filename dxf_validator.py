@@ -112,7 +112,7 @@ def check_geometry(beams, columns, codes):
                 "Status": status,
                 "Capacity_kN": analysis['ultimate_capacity_kn']
             })
-        except Exception as e:
+        except Exception:
             report_data.append({
                 "Type": "COLUMN",
                 "ID": i+1,

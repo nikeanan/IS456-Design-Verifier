@@ -44,15 +44,20 @@ class BIMExtractor:
                     material = association.RelatingMaterial
                     if material.is_a('IfcMaterial'):
                         name = material.Name.upper()
-                        if "30" in name: return 30.0
-                        if "25" in name: return 25.0
-                        if "35" in name: return 35.0
-                        if "40" in name: return 40.0
+                        if "30" in name:
+                            return 30.0
+                        if "25" in name:
+                            return 25.0
+                        if "35" in name:
+                            return 35.0
+                        if "40" in name:
+                            return 40.0
         return 30.0 
 
     def extract_thickness_from_name(self, name):
         """Regex fallback to extract thickness from names like 'Generic 150mm' or 'Generic 300'."""
-        if not name: return 0.0
+        if not name:
+            return 0.0
         
         # 1. First try explicit 'mm' matching (e.g., 150mm, 425 mm)
         match = re.search(r'(\d+)\s*mm', name, re.IGNORECASE)

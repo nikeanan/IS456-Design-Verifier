@@ -40,7 +40,7 @@ class RCBeamVerifier:
         state = self.is_under_or_over_reinforced()
         
         if state == "Over-reinforced":
-            return f"FAIL (Over-reinforced): IS 456 prohibits over-reinforced sections. Redesign required."
+            return "FAIL (Over-reinforced): IS 456 prohibits over-reinforced sections. Redesign required."
             
         if M_ur >= M_u_applied:
             return f"SAFE ({state}): Capacity {M_ur:.2f} kNm >= Applied {M_u_applied:.2f} kNm."

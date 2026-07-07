@@ -49,7 +49,7 @@ def extract_beam_column_info(doc):
         elif 'S-COL' in layer_name and entity.dxftype() == 'LWPOLYLINE':
             columns.append(entity)
             
-    prin@t(f"🔍 Found {len(beams)} beam entities and {len(columns)} column entities.")
+    print(f"🔍 Found {len(beams)} beam entities and {len(columns)} column entities.")
     return beams, columns
 
 # --- Helper function to calculate bounding box of a polyline ---
@@ -69,6 +69,3 @@ def get_polyline_bounding_box(polyline):
         if point[1] > max_y:
             max_y = point[1]
     
-    width = max_x - min_x
-    depth = max_y
-
